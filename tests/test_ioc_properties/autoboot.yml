@@ -1,0 +1,4 @@
+autoboot:
+  application:
+    name: env(APPLICATION_NAME)
+    module: api
