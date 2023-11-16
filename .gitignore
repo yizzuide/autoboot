@@ -3,4 +3,6 @@ __pycache__
 *.log
 build
 target
+dist
 *.egg-info
+.vscode
