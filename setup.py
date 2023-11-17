@@ -1,6 +1,6 @@
 from setuptools import find_packages, setup
 
-VERSION = '0.0.2'
+VERSION = '0.1.0'
 
 with open('README.md', 'r', encoding='utf-8') as fp:
     long_description = fp.read()
@@ -22,7 +22,8 @@ setup(
         'filetype>=1.2.0',
         'loguru>=0.7.0',
         'pyyaml>=6.0.1',
-        'wrapt>=1.14.1'
+        'wrapt>=1.14.1',
+        'pydantic>=1.10.12'
     ],
     python_requires='>=3.8',
     classifiers=[

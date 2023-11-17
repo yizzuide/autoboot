@@ -1,9 +1,7 @@
 
+import loguru
 from dataclasses import dataclass
 from typing import Any, List, Optional, Tuple, TypeVar
-
-import loguru
-
 from autoboot.args import get_env_name
 from autoboot.logging import Logging
 from autoboot.plugin import AppPlugin

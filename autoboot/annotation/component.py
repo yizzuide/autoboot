@@ -1,9 +1,6 @@
-
 from functools import wraps
 from typing import Callable, TypeVar
-
 from loguru import logger
-
 from autoboot.applications import AutoBoot
 
 R = TypeVar("R")
