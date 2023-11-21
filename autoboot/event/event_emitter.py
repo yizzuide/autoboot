@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from typing import TypeVar, Generic
+from typing import TypeVar, Generic, Callable
 
 T = TypeVar('T')
 
@@ -35,3 +35,6 @@ class EventEmitter(object):
     
     for f in self._listeners.get(action, []):
       f(event)
+      
+  def clear(self):
+    self._listeners.clear()

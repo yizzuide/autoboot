@@ -14,7 +14,7 @@ class Logging:
   Logging class wrapper with loguru.
   """
   
-  __instance: LoggingType = None
+  _instance: LoggingType = None
   
   def __init__(self, log_dir: str, app_name: str, module: str, max_size: str, retention: str, env_name: str):
     self.log_dir = log_dir
@@ -23,7 +23,7 @@ class Logging:
     self.max_size = max_size
     self.retention = retention
     self.logger = self.console_logger() if env_name == Env.DEV.value else self.file_rotation_logger()
-    Logging.__instance = self
+    Logging._instance = self
     
   def console_logger(self) -> loguru.Logger:
     logger.configure(
@@ -55,14 +55,14 @@ class Logging:
   
   @classmethod
   def catch_file_rotation_logger(cls, user_case: str):
-    log_app_dir = os.path.join(cls.__instance.log_dir, cls.__instance.app_name)
+    log_app_dir = os.path.join(cls._instance.log_dir, cls._instance.app_name)
     if not os.path.exists(log_app_dir):
       os.makedirs(log_app_dir)
     logger.configure(extra={"user_case": user_case})
     logger.add(
-      f"{log_app_dir}/{cls.__instance.module}-error-{{time:YYYY-MM-DD}}.log",
-      rotation=cls.__instance.max_size,
-      retention=cls.__instance.retention,
+      f"{log_app_dir}/{cls._instance.module}-error-{{time:YYYY-MM-DD}}.log",
+      rotation=cls._instance.max_size,
+      retention=cls._instance.retention,
       level="ERROR",
       format="{time:YYYY-MM-DD HH:mm:ss.SSS} | {level: <8} | {name}:{module}:{function}:{line} -> [{extra[user_case]}] - {message}",
       catch=True,

@@ -26,49 +26,49 @@ class AutoBootConfig:
 class AutoBoot(object):
   """create instance of AutoBoot."""
   
-  __instance = None
-  __init_flag = False
+  _instance = None
+  _init_flag = False
   
   def __new__(cls, config: Optional[AutoBootConfig]) -> AppType:
     # create instance only once
-    if cls.__instance is None:
-        cls.__instance = super().__new__(cls)
-    return cls.__instance
+    if cls._instance is None:
+        cls._instance = super().__new__(cls)
+    return cls._instance
   
   def __init__(self: AppType, config: Optional[AutoBootConfig] = AutoBootConfig()) -> None:
-    if AutoBoot.__init_flag is True:
+    if AutoBoot._init_flag is True:
       return
     self.config = config
     AutoBoot.logger: loguru.Logger = None
-    self.__app_plugins: List[AppPlugin] = []
-    self.__components: List[Tuple[str, Any]] = []
-    AutoBoot.__config_data = dict[str, Any]
-    AutoBoot.__init_flag = True
+    self._app_plugins: List[AppPlugin] = []
+    self._components: List[Tuple[str, Any]] = []
+    AutoBoot._config_data = dict[str, Any]
+    AutoBoot._init_flag = True
     
   @classmethod
   def instance(cls: AppType) -> AppType:
-    return cls.__instance
+    return cls._instance
   
   @staticmethod
   def get_config_data() -> dict[str, Any]:
-    return AutoBoot.__config_data
+    return AutoBoot._config_data
     
   
   @property
   def app_plugins(self) -> List[AppPlugin]:
-    return self.__app_plugins
+    return self._app_plugins
   
   @app_plugins.setter
   def app_plugins(self, app_plugins: List[AppPlugin]) -> None:
-    self.__app_plugins = app_plugins 
+    self._app_plugins = app_plugins 
   
   @property
   def components(self) -> List[Tuple[str, Any]]:
-    return self.__components
+    return self._components
     
   def apply(self: AppType, app_plugin: AppPlugin) -> None:
     app_plugin.install(self)
-    self.__app_plugins.append(app_plugin)
+    self._app_plugins.append(app_plugin)
   
   def run(self: AppType):
     # config environment variables
@@ -78,7 +78,7 @@ class AutoBoot(object):
     load_env_file(self.config.config_dir, env_name)
     
     # load yml
-    AutoBoot.__config_data = load_yaml_file(self.config.config_dir, self.config.yml_config)
+    AutoBoot._config_data = load_yaml_file(self.config.config_dir, self.config.yml_config)
     
     # config logger
     from autoboot.application_properties import ApplicationProperties
@@ -93,10 +93,10 @@ class AutoBoot(object):
     
     AutoBoot.logger.info(f"application finish load env: {env_name}")
     
-    for app_plugin in self.__app_plugins:
+    for app_plugin in self._app_plugins:
       app_plugin.env_prepared()
 
-    for app_plugin in self.__app_plugins:
+    for app_plugin in self._app_plugins:
       app_plugin.app_started()
       
     AutoBoot.logger.info("application started!")
