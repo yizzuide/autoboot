@@ -1,8 +1,11 @@
-__pycache__
-.pytest_cache
+*.egg-info
 *.log
+
+.vscode
+.idea
+.pytest_cache
+__pycache__
 build
 target
 dist
-*.egg-info
-.vscode
+logs

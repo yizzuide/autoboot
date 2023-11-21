@@ -2,3 +2,5 @@ autoboot:
   application:
     name: env(APPLICATION_NAME)
     module: api
+    log:
+      max_size: 200 MB

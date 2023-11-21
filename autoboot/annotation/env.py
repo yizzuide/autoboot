@@ -1,15 +1,14 @@
 
 import os
-from typing import Callable
-
 import wrapt
-
+from typing import Callable, TypeVar
 from autoboot.applications import AutoBoot
 from autoboot.annotation.component import component
 from autoboot.process import get_yml_value
 
+R = TypeVar("R")
 
-def env(keypath: str) -> str | None:
+def env(keypath: str) -> str | int | float | None:
   """get env value from keypath, support find in `.env` and `.yml`."""
   
   if "." in keypath:
@@ -25,20 +24,20 @@ def env(keypath: str) -> str | None:
     return str(value) if value else None
     
 
-def value(keypath: str) -> Callable[..., str | None]:
+def value(keypath: str) -> R:
   """get value from config file."""
   
   @wrapt.decorator
-  def decorator(fn, instance, args, kwargs) -> str | None:
+  def decorator(fn: Callable[..., R], instance, args, kwargs) -> R:
     return env(keypath) or fn(*args, **kwargs)
   return decorator
       
 
-def value_component(keypath: str) -> Callable[..., str | None]:
+def value_component(keypath: str) -> R:
   """get value from config file and cache as component."""
   
   @wrapt.decorator
   @component(name=f"env[{keypath}]")
-  def decorator(fn, instance, args, kwargs) -> str | None:
+  def decorator(fn: Callable[..., R], instance, args, kwargs) -> R:
     return env(keypath) or fn(*args, **kwargs)
   return decorator

@@ -21,10 +21,10 @@ class ApplicationProperties:
   
   @value_component("autoboot.application.log.max_size")
   @staticmethod
-  def log_max_size() -> int:
-    return 200
+  def log_max_size() -> str:
+    return "100 MB"
 
   @value_component("autoboot.application.log.retention")
   @staticmethod
   def log_retention() -> str:
-    return "1 days"
+    return "30 days"
