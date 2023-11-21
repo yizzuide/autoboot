@@ -58,12 +58,13 @@ class Logging:
     log_app_dir = os.path.join(cls.__instance.log_dir, cls.__instance.app_name)
     if not os.path.exists(log_app_dir):
       os.makedirs(log_app_dir)
+    logger.configure(extra={"user_case": user_case})
     logger.add(
-      f"{log_app_dir}/{cls.__instance.module}-catch_{user_case}-{{time:YYYY-MM-DD}}.log",
+      f"{log_app_dir}/{cls.__instance.module}-error-{{time:YYYY-MM-DD}}.log",
       rotation=cls.__instance.max_size,
       retention=cls.__instance.retention,
       level="ERROR",
-      format="{time:YYYY-MM-DD HH:mm:ss.SSS} | {level: <8} | {name}:{module}:{function}:{line} - {message}",
+      format="{time:YYYY-MM-DD HH:mm:ss.SSS} | {level: <8} | {name}:{module}:{function}:{line} -> [{extra[user_case]}] - {message}",
       catch=True,
       enqueue=True,
       backtrace=True
