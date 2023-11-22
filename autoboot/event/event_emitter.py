@@ -1,6 +1,6 @@
-import inspect
 from dataclasses import dataclass
-from typing import TypeVar, Generic, Callable, get_args
+from typing import TypeVar, Generic, Callable
+from autoboot.util.type_reflect import get_generic_type
 
 T = TypeVar('T')
 
@@ -37,13 +37,9 @@ class EventEmitter(object):
       if not check_type:
         f(event)
       else:
-        # get event param using inspect
-        params = inspect.signature(f).parameters
-        if params.get("event") is not None:
-          # retrieval event data generic type using get_args
-          generic_type = get_args(params.get("event").annotation)[0]
-          if isinstance(event.data, generic_type):
-            f(event)
+        generic_type = get_generic_type(f, "event", 0)
+        if generic_type and isinstance(event.data, generic_type):
+          f(event)
       
   def clear(self):
     self._listeners.clear()

@@ -1,5 +1,5 @@
-
-from typing import Any
+import inspect
+from typing import Any, Callable, get_args
 
 
 def has_property(obj: Any, prop: str, is_own: bool) -> bool:
@@ -15,8 +15,22 @@ def has_property(obj: Any, prop: str, is_own: bool) -> bool:
     bool: True if the property is present, False otherwise.
   """
   if is_own:
-    # 返回本地作用域中定义的属性和属性值构成的字典：返回object 对象的 __dict__ 属性
+    # properties from object.__dict__
     return prop in vars(obj)
   else:
-    #获取的属性来自对象所属的类或父类
+    # properties from self or super class
     return hasattr(obj, prop)
+  
+def get_method_params(fn: Callable[..., Any]):
+  return inspect.signature(fn).parameters
+
+def get_param_generic(param: inspect.Parameter, index: int):
+  return get_args(param.annotation)[index]
+
+def get_generic_type(fn: Callable[..., Any], param_name: str, index: int):
+  params = get_method_params(fn)
+  event_param = params.get(param_name)
+  return get_param_generic(event_param, index) if event_param else None
+
+def match_param_type(param: inspect.Parameter, type: Any):
+  return param.annotation == type

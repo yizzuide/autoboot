@@ -1,6 +1,6 @@
 from setuptools import find_packages, setup
 
-VERSION = '0.2.0'
+VERSION = '0.3.0'
 
 with open('README.md', 'r', encoding='utf-8') as fp:
     long_description = fp.read()
@@ -25,10 +25,19 @@ setup(
         'wrapt>=1.14.1',
         'pydantic>=1.10.12'
     ],
+    extra_require={
+        'web': ['fastapi>=0.70.1']
+    },
+    tests_require=[
+        'pytest>=6.2.0',
+        'pytest-cov>=2.10.0'
+    ],
     python_requires='>=3.8',
     classifiers=[
+        'Development Status :: 5 - Production/Stable',
         'Operating System :: OS Independent',
         'Intended Audience :: Developers',
+        'Programming Language :: Python :: 3.8',
         'License :: OSI Approved :: MIT License'
     ],
 )
