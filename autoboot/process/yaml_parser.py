@@ -19,6 +19,6 @@ def get_yml_value(config_data: dict[str, Any], keypath: str) -> Any:
   value = get_value_by(config_data, keypath)
   if not value:
     return None
-  if value.startswith("env(") and value.endswith(")"):
+  if isinstance(value, str) and value.startswith("env(") and value.endswith(")"):
     return os.getenv(value[4:-1])
   return value
