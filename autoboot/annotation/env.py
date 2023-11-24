@@ -8,20 +8,20 @@ from autoboot.process import get_yml_value
 
 R = TypeVar("R")
 
-def env(keypath: str) -> str | int | float | None:
+def env(keypath: str) -> int | float | str | dict | list | None:
   """get env value from keypath, support find in `.env` and `.yml`."""
   
   if "." in keypath:
     value = get_yml_value(AutoBoot.get_config_data(), keypath=keypath)
     if not value:
       return None
-    return str(value)
+    return value
   else:
     value = os.getenv(keypath)
     if value:
       return value
     value = AutoBoot.get_config_data().get(keypath)
-    return str(value) if value else None
+    return value if value else None
     
 
 def value(keypath: str) -> R:
