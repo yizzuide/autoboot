@@ -21,11 +21,20 @@ class EventEmitter(object):
 
   def on(self, action="default"):
     """
-    Register a callback for an event.
+    Register a callback for an event with action name.
     """
-    def decorator(fn: Callable[..., None]) -> None:
+    
+    def decorator(fn: Callable[..., None], *args, **kwargs) -> None:
       self._listeners.setdefault(action, []).append(fn)
     return decorator
+  
+  def on_event(self, fn: Callable[..., None]):
+    """
+    Register a callback for an event with event generic type.
+    """
+    
+    self._listeners.setdefault("default", []).append(fn)
+    
 
   def emit(self, event: Event[T], action = "default"):
     """

@@ -1,6 +1,6 @@
 from setuptools import find_packages, setup
 
-VERSION = '0.3.1'
+VERSION = '0.4.0'
 
 with open('README.md', 'r', encoding='utf-8') as fp:
     long_description = fp.read()
@@ -14,7 +14,7 @@ setup(
     long_description=long_description,
     long_description_content_type="text/markdown",
     url='https://github.com/yizzuide/autoboot',
-    keywords=['IoC', 'auto config'],
+    keywords=['IoC', "event", 'auto config'],
     packages=find_packages(exclude=['tests*']),
     include_package_data=True,
     install_requires=[
@@ -23,7 +23,8 @@ setup(
         'loguru>=0.7.0',
         'pyyaml>=6.0.1',
         'wrapt>=1.14.1',
-        'pydantic>=1.10.12'
+        'pydantic>=1.10.12',
+        'result>=0.14.0'
     ],
     extra_require={
         'web': ['fastapi>=0.70.1']
