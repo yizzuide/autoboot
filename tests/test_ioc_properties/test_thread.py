@@ -14,4 +14,4 @@ def test_thread_pool():
   task1 = ThreadPoolTask()
   task2 = ThreadPoolTask()
   assert id(task1) == id(task2)
-  task1.submit(run())
+  task1.submit(run)

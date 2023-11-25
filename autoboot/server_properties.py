@@ -9,6 +9,12 @@ class ServerProperties:
     """The max workers is 31"""
     return 28
   
+  @value_component("server.threads.queue_size")
+  @staticmethod
+  def thread_max_queue() -> int:
+    """The max queue is 1000"""
+    return 1000
+  
   @value_component("server.threads.rejected")
   @staticmethod
   def thread_rejected() -> str:
