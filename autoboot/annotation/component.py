@@ -6,6 +6,10 @@ from autoboot.applications import AutoBoot
 R = TypeVar("R")
 
 def comp_from_cache(name: str, comp_factory: Callable[..., R]):
+  """
+  Get component from cache
+  """
+ 
   app: AutoBoot = AutoBoot.instance()
   # return cached component if match
   for key, comp in app.components:

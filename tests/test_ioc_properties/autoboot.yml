@@ -4,3 +4,8 @@ autoboot:
     module: api
     log:
       max_size: 200 MB
+
+server:
+  threads:
+    max: 20
+    rejected: wait
