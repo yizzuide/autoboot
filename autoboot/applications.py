@@ -1,7 +1,7 @@
 
 import loguru
 from dataclasses import dataclass
-from typing import Any, List, Optional, Tuple, TypeVar
+from typing import Any, Callable, List, Optional, Tuple, TypeVar
 from autoboot.args import get_env_name
 from autoboot.logging import Logging
 from autoboot.plugin import AppPlugin
@@ -9,6 +9,8 @@ from autoboot.process import load_env_file, load_yaml_file
 
 # define AutoBoot class type
 AppType = TypeVar("AppType", bound="AutoBoot")
+
+R = TypeVar("R")
 
 @dataclass
 class AutoBootConfig:
@@ -77,7 +79,7 @@ class AutoBoot(object):
     AutoBoot._contexts[runner[0]] = runner[1]
     self._app_plugins.append(app_plugin)
   
-  def run(self: AppType):
+  def run(self: AppType, expose: Callable[..., R] = None):
     # config environment variables
     env_name = get_env_name()
     
@@ -107,3 +109,6 @@ class AutoBoot(object):
       app_plugin.app_started()
       
     AutoBoot.logger.info("application started!")
+    
+    if expose:
+      return expose()
