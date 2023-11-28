@@ -74,7 +74,7 @@ class AutoBoot(object):
   def components(self) -> List[Tuple[str, Any]]:
     return self._components
     
-  def apply(self: AppType, app_plugin: AppPlugin) -> None:
+  def apply(self: AppType, app_plugin: AppPlugin) -> AppType:
     runner = app_plugin.install()
     AutoBoot._contexts[runner[0]] = runner[1]
     self._app_plugins.append(app_plugin)
