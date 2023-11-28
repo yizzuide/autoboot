@@ -1,11 +1,17 @@
 
 import abc
+from typing import TypeAlias, Any
 
+Runner: TypeAlias = (str, Any)
 
 class AppPlugin(abc.ABC):
   
+  @staticmethod
+  def get_context() -> Any:
+    return
+  
   @abc.abstractmethod
-  def install(self) -> None:
+  def install(self) -> Runner:
     pass
   
   @abc.abstractmethod

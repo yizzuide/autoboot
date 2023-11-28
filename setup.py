@@ -1,6 +1,6 @@
 from setuptools import find_packages, setup
 
-VERSION = '0.5.1'
+VERSION = '0.5.2'
 
 with open('README.md', 'r', encoding='utf-8') as fp:
     long_description = fp.read()
@@ -26,9 +26,6 @@ setup(
         'pydantic>=1.10.12',
         'result>=0.14.0'
     ],
-    extra_require={
-        'web': ['fastapi>=0.70.1', 'uvicorn>=0.16.0']
-    },
     tests_require=[
         'pytest>=6.2.0',
         'pytest-cov>=2.10.0'

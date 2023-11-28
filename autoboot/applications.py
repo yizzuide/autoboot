@@ -39,10 +39,11 @@ class AutoBoot(object):
     if AutoBoot._init_flag is True:
       return
     self.config = config
-    AutoBoot.logger: loguru.Logger = None
     self._app_plugins: List[AppPlugin] = []
     self._components: List[Tuple[str, Any]] = []
+    AutoBoot.logger: loguru.Logger = None
     AutoBoot._config_data = dict[str, Any]
+    AutoBoot._contexts: dict[str, Any] = {}
     AutoBoot._init_flag = True
     
   @classmethod
@@ -52,6 +53,10 @@ class AutoBoot(object):
   @staticmethod
   def get_config_data() -> dict[str, Any]:
     return AutoBoot._config_data
+  
+  @staticmethod
+  def get_context(name: str):
+    return AutoBoot._contexts.get(name)
     
   
   @property
@@ -60,14 +65,16 @@ class AutoBoot(object):
   
   @app_plugins.setter
   def app_plugins(self, app_plugins: List[AppPlugin]) -> None:
-    self._app_plugins = app_plugins 
+    for ap in app_plugins:
+      self.apply(ap)
   
   @property
   def components(self) -> List[Tuple[str, Any]]:
     return self._components
     
   def apply(self: AppType, app_plugin: AppPlugin) -> None:
-    app_plugin.install(self)
+    runner = app_plugin.install()
+    AutoBoot._contexts[runner[0]] = runner[1]
     self._app_plugins.append(app_plugin)
   
   def run(self: AppType):
