@@ -1,9 +1,9 @@
 autoboot:
   application:
-    name: env(APPLICATION_NAME)
-    module: api
+    name: !env APPLICATION_NAME
+    module: &module api
     log:
-      max_size: 200 MB
+      max_size: !!str 200 MB
 
 server:
   threads:

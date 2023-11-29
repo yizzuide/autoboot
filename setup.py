@@ -1,6 +1,6 @@
 from setuptools import find_packages, setup
 
-VERSION = '0.5.2'
+VERSION = '0.6.0'
 
 with open('README.md', 'r', encoding='utf-8') as fp:
     long_description = fp.read()
@@ -24,7 +24,8 @@ setup(
         'pyyaml>=6.0.1',
         'wrapt>=1.14.1',
         'pydantic>=1.10.12',
-        'result>=0.14.0'
+        'result>=0.14.0',
+        'durations>=0.3.3',
     ],
     tests_require=[
         'pytest>=6.2.0',

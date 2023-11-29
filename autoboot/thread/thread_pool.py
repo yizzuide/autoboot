@@ -8,6 +8,8 @@ from typing import Callable, Any
 class ThreadPoolTask(Component):
   """The ThreadPoolTask class is extends Component which means is a singleton instance."""
   
+  component_name = "thread_pool_task"
+  
   def __init__(self):
     self.executor = ThreadPoolExecutor(max_workers=ServerProperties.thread_max_workers())
     
