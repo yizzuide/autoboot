@@ -1,6 +1,6 @@
 autoboot:
   application:
-    name: !env APPLICATION_NAME
+    name: &app_name !env APPLICATION_NAME
     module: &module api
     log:
       max_size: !!str 200 MB

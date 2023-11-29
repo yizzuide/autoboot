@@ -37,6 +37,9 @@ def construct_include(loader: Loader, node: yaml.Node) -> Any:
 
 def environment_vars_constructor(loader: Loader, node: yaml.Node) -> Any:
   value = loader.construct_scalar(node)
+  if '$' in value:
+    # support search env var as $VAR or ${VAR}
+    return os.path.expandvars(value)
   return os.getenv(value)
 
 
