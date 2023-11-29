@@ -4,6 +4,7 @@ import json
 import yaml
 from typing import Any, IO
 from durations import Duration
+from autoboot.util.capacity import Capacity
 
 
 class Loader(yaml.SafeLoader):
@@ -46,3 +47,7 @@ def environment_vars_constructor(loader: Loader, node: yaml.Node) -> Any:
 def duration_constructor(loader: Loader, node: yaml.Node) -> Any:
   value = loader.construct_scalar(node)
   return int(Duration(value).to_miliseconds())
+
+def capacity_constructor(loader: Loader, node: yaml.Node) -> Any:
+  value = loader.construct_scalar(node)
+  return int(Capacity(value).to_bytes())
