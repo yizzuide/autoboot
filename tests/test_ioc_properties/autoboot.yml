@@ -2,6 +2,8 @@ autoboot:
   application:
     name: &app_name !env APPLICATION_NAME
     module: &module api
+    scan_listener_packages:
+      - tests.test_ioc_properties.listener
     log:
       max_size: !!str 200 MB
 

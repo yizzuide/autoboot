@@ -1,11 +1,13 @@
 
 import loguru
 from dataclasses import dataclass
-from typing import Any, Callable, List, Optional, Tuple, TypeVar
+from typing import Any, Callable, Optional, Tuple, TypeVar, Self
 from autoboot.args import get_env_name
 from autoboot.logging import Logging
 from autoboot.plugin import AppPlugin
 from autoboot.process import load_env_file, load_yaml_file
+from autoboot.event import ApplicationListener
+from autoboot.event import ComponentListener
 
 # define AutoBoot class type
 AppType = TypeVar("AppType", bound="AutoBoot")
@@ -26,60 +28,75 @@ class AutoBootConfig:
   
 
 class AutoBoot(object):
-  """create instance of AutoBoot."""
+  """The root application context which use of single containers is designed for simplicity and microservice."""
   
   _instance = None
   _init_flag = False
   
-  def __new__(cls, config: Optional[AutoBootConfig]) -> AppType:
+  def __new__(cls, config: Optional[AutoBootConfig]) -> Self:
     # create instance only once
     if cls._instance is None:
         cls._instance = super().__new__(cls)
     return cls._instance
   
-  def __init__(self: AppType, config: Optional[AutoBootConfig] = AutoBootConfig()) -> None:
+  def __init__(self, config: Optional[AutoBootConfig] = AutoBootConfig()) -> None:
     if AutoBoot._init_flag is True:
       return
     self.config = config
-    self._app_plugins: List[AppPlugin] = []
-    self._components: List[Tuple[str, Any]] = []
+    self._app_plugins: list[AppPlugin] = []
+    self._components: list[Tuple[str, Any]] = []
+    self._component_listeners: list[ComponentListener] = []
+    self._runners: dict[str, Any] = {}
+    self._listeners: list[ApplicationListener] = []
+    self._config_data = dict[str, Any]
     AutoBoot.logger: loguru.Logger = None
-    AutoBoot._config_data = dict[str, Any]
-    AutoBoot._contexts: dict[str, Any] = {}
     AutoBoot._init_flag = True
     
   @classmethod
-  def instance(cls: AppType) -> AppType:
+  def instance(cls):
+    """Return current application context instance."""
     return cls._instance
   
-  @staticmethod
-  def get_config_data() -> dict[str, Any]:
-    return AutoBoot._config_data
+  @classmethod
+  def get_config_data(cls) -> dict[str, Any]:
+    """Get yaml config dict data."""
+    return cls.instance()._config_data
   
   @staticmethod
-  def get_context(name: str):
-    return AutoBoot._contexts.get(name)
-    
-  
+  def get_runner(name: str):
+    """Get plugin runner with name."""
+    return AutoBoot.instance()._runners.get(name)
+     
   @property
-  def app_plugins(self) -> List[AppPlugin]:
+  def app_plugins(self) -> list[AppPlugin]:
+    """Get application plugins."""
     return self._app_plugins
   
   @app_plugins.setter
-  def app_plugins(self, app_plugins: List[AppPlugin]) -> None:
-    for ap in app_plugins:
-      self.apply(ap)
+  def app_plugins(self, app_plugins: list[AppPlugin]) -> None:
+    self._app_plugins = app_plugins
   
   @property
-  def components(self) -> List[Tuple[str, Any]]:
+  def components(self) -> list[Tuple[str, Any]]:
+    """Ioc container for find depends."""
     return self._components
     
-  def apply(self: AppType, app_plugin: AppPlugin) -> AppType:
-    runner = app_plugin.install()
-    AutoBoot._contexts[runner[0]] = runner[1]
+  def apply(self, app_plugin: AppPlugin) -> Self:
+    """Apply plugin in application context."""
     self._app_plugins.append(app_plugin)
+    return self
+    
+  def addListener(self, listener: ApplicationListener) -> Self:
+    self._listeners.append(listener)
+    return self
   
-  def run(self: AppType, expose: Callable[..., R] = None):
+  def addComponentListener(self, listener: ComponentListener) -> Self:
+    self._component_listeners.append(listener)
+    return self
+  
+  def run(self, expose: Callable[..., R] = None):
+    """Application context run entry."""
+    
     # config environment variables
     env_name = get_env_name()
     
@@ -87,7 +104,7 @@ class AutoBoot(object):
     load_env_file(self.config.config_dir, env_name)
     
     # load yml
-    AutoBoot._config_data = load_yaml_file(self.config.config_dir, self.config.yml_config)
+    self._config_data = load_yaml_file(self.config.config_dir, self.config.yml_config)
     
     # config logger
     from autoboot.application_properties import ApplicationProperties
@@ -102,11 +119,25 @@ class AutoBoot(object):
     
     AutoBoot.logger.info(f"application finish load env: {env_name}")
     
-    for app_plugin in self._app_plugins:
-      app_plugin.env_prepared()
+    for ap in self.app_plugins:
+      ap.env_prepared()
+      
+    for listener in self._listeners:
+      listener.on_env_prepared(self._config_data)
+      
+    for ap in self.app_plugins:
+      runner = ap.install()
+      self._runners[ap.get_context_name()] = runner
+      
+    if ApplicationProperties.scan_listener_packages():
+      for package in ApplicationProperties.scan_listener_packages():
+        __import__(package)
 
-    for app_plugin in self._app_plugins:
-      app_plugin.app_started()
+    for ap in self.app_plugins:
+      ap.app_started()
+      
+    for listener in self._listeners:
+      listener.on_started()
       
     AutoBoot.logger.info("application started!")
     

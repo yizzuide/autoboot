@@ -14,6 +14,11 @@ class ApplicationProperties:
   def module() -> str:
     return "api"
   
+  @value_component("autoboot.application.scan_listener_packages")
+  @staticmethod
+  def scan_listener_packages() -> list[str]:
+    pass
+  
   @value_component("autoboot.application.log.dir")
   @staticmethod
   def log_dir() -> str:

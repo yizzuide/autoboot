@@ -10,12 +10,16 @@ def comp_from_cache(name: str, comp_factory: Callable[..., R]):
   Get component from cache
   """
  
-  app: AutoBoot = AutoBoot.instance()
+  app = AutoBoot.instance()
   # return cached component if match
   for key, comp in app.components:
     if key == name:
       return comp
   comp = comp_factory()
+  
+  for listener in app._component_listeners:
+    listener.after_instantiation(name, comp)
+    
   # caching component with name
   if comp:
     app.components.append((name, comp))
