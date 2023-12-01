@@ -1,5 +1,19 @@
 # autoboot
 一个Python语言的仿SpringBoot开发方式，支持IoC组件容器、注解式注册、配置驱动开发、事件通知、插件扩展的快速开发框架。
+<p>
+  <a href="https://pypi.org/project/autoboot">
+      <img src="https://img.shields.io/pypi/v/autoboot?color=%2334D058&label=pypi%20package" alt="Version">
+  </a>
+  <a href="https://pypi.org/project/autoboot">
+        <img src="https://img.shields.io/pypi/pyversions/autoboot.svg?color=%2334D058" alt="Python">
+    </a>
+    <a href="https://pepy.tech/project/autoboot">
+        <img src="https://static.pepy.tech/personalized-badge/autoboot?period=total&units=international_system&left_color=grey&right_color=brightgreen&left_text=Downloads" alt="Downloads">
+    </a>
+    <a href="https://github.com/yizzuide/autoboot/blob/main/LICENSE">
+        <img src="https://img.shields.io/github/license/yizzuide/autoboot" alt="License">
+    </a>
+</p>
 
 ## Purpose
 在使用Python开发AI应用服务时遇到以下问题：
