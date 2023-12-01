@@ -45,15 +45,8 @@ pip install autoboot
 ```
 
 ### Usage
-#### 1. 导入并运行
-```python
-from autoboot import AutoBoot, AutoBootConfig
 
-context = Autoboot(AutoBootConfig(config_dir="./config"))
-context.run()
-```
-
-#### 2. 配置
+#### 配置
 * 启动配置文件：./config/.env
 
 ```ini
@@ -75,8 +68,191 @@ APPLICATION_NAME=demo-dev
 ```yml
 autoboot:
   application:
+    # !env 引用 .env 里的配置参数 
     name: !env APPLICATION_NAME
     # 微服务模块名
     module: api
+    # 日志
+    log:
+      dir: logs
+      # !!str 明确定义为字符串类型
+      max_size: !!str 100 MB
+      retention: !!str 30 days
 ```
 
+#### 创建并启动容器上下文
+```python
+from autoboot import AutoBoot, AutoBootConfig
+
+context = Autoboot(AutoBootConfig(config_dir="./config"))
+context.run()
+
+# 或者直接使用 loguru.logger，日志的配置同样生效
+Autoboot.logger.info("Context run succeed!")
+```
+
+## Advanced Features
+
+### 自定义配置
+
+#### 在主配置里添加
+```yml
+api:
+  # 在环境配置文件.env添加：API_SECRET_KEY=xxx
+  secret: !env API_SECRET_KEY
+```
+
+#### 创建配置类: api_properties.py
+```python
+from autoboot.annotation.env import value_component
+
+class ApiProperties:
+
+  @value_component("api.secret")
+  @staticmethod
+  def secret() -> str:
+    # 返回的值作为默认的配置值
+    return ""
+```
+
+#### 导入并使用配置
+```python
+from autoboot import AutoBoot, AutoBootConfig
+from .api_properties import ApiProperties
+
+context = Autoboot(AutoBootConfig(config_dir="./config"))
+context.run()
+
+# 在容器启动完成后获取
+Autoboot.logger.info("api.secret: {}", ApiProperties.secret())
+```
+
+### 监听容器事件
+
+#### 主配置文件
+```yml
+autoboot:
+  application:
+    # 扫描监听器包
+    scan_listener_packages:
+      - listener
+```      
+
+#### 项目下创建目录`listener`
+
+在该目录创建`__init__.py`，添加以下内容：
+
+```python
+from .app_listener import AppListener
+
+__all__ = ["MyListener"]
+```
+
+在该目录创建`app_listener.py`，添加以下内容：
+
+```python
+from autoboot import AutoBoot
+from autoboot.event import ApplicationListener
+from autoboot.meta import Listener
+
+@Listener
+class AppListener(ApplicationListener):
+
+  def on_env_prepared(self, config: dict[str, Any]):
+    AutoBoot.logger.info("listen: env prepared!")
+  
+  def on_started(self):
+    AutoBoot.logger.info("listen: app started!")
+
+```
+
+### 发送事件
+
+#### 基于Action的事件发送与监听
+```python
+from dataclasses import dataclass
+from autoboot.event import emitter, Event
+from loguru import logger
+
+@dataclass
+class PayOrder:
+  no: str
+
+@emitter.on("pay_action")
+def received_payment(event: Event[str]):
+  logger.info("received_payment")
+  assert(event.data == "pay order: 1001")
+
+
+emitter.emit(action="pay_action", event=Event("pay order: 1001"))
+```
+
+#### 基于事件类型自动匹配的发送与监听
+```python
+from dataclasses import dataclass
+from autoboot.event import emitter, Event
+from loguru import logger
+
+@dataclass
+class PayOrder:
+  no: str
+
+@emitter.on_event
+def received_pay(event: Event[PayOrder]):
+  logger.info("received_pay")
+  assert(event.data == PayOrder("1001"))
+
+emitter.emit(event=Event(PayOrder("1001")))
+```
+
+### 扩展插件
+#### 创建插件: my_plugin.py
+```python
+from autoboot.plugin import AppPlugin
+
+class MyPlugin(AppPlugin):
+  def install(self):
+    AutoBoot.logger.info("plugin: installed!")
+
+  def on_env_prepared(self, config: dict[str, Any]):
+    AutoBoot.logger.info("plugin: env prepared!")
+
+  def on_started(self):
+    AutoBoot.logger.info("plugin: started!")
+```
+
+#### 安装插件
+```python
+from autoboot import AutoBoot, AutoBootConfig
+from .my_plugin import MyPlugin
+
+context = Autoboot(AutoBootConfig(config_dir="./config"))
+context.apply(MyPlugin())
+context.run()
+```
+
+#### 注册插件
+```python
+from autoboot.plugin import PluginManager
+
+PluginManager.register(MyPlugin)
+```
+
+### 扩展事件
+#### 创建事件
+```python
+from autoboot.event import Event
+
+class PayOrder(Event):
+  pass
+```
+
+#### 注册事件
+```python
+from autoboot.event import EventManager
+
+## Contributors
+有问题可以在issues开话题讨论，如果你有新的想法，创建新的`feat`或`pref`分支并提交PR。
+
+## License
+[MIT License](https://github.com/yizzuide/autoboot/blob/main/LICENSE)
