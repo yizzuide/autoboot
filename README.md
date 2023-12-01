@@ -231,26 +231,6 @@ context.apply(MyPlugin())
 context.run()
 ```
 
-#### 注册插件
-```python
-from autoboot.plugin import PluginManager
-
-PluginManager.register(MyPlugin)
-```
-
-### 扩展事件
-#### 创建事件
-```python
-from autoboot.event import Event
-
-class PayOrder(Event):
-  pass
-```
-
-#### 注册事件
-```python
-from autoboot.event import EventManager
-
 ## Contributors
 有问题可以在issues开话题讨论，如果你有新的想法，创建新的`feat`或`pref`分支并提交PR。
 
