@@ -145,7 +145,7 @@ autoboot:
 ```python
 from .app_listener import AppListener
 
-__all__ = ["MyListener"]
+__all__ = ["AppListener"]
 ```
 
 在该目录创建`app_listener.py`，添加以下内容：
