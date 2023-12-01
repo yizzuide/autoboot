@@ -140,7 +140,7 @@ class HelloService(Component):
     return "Hello World!"
 ```
 
-#### 注册组件
+#### 注册并获取组件
 ```python
 from autoboot import AutoBoot, AutoBootConfig
 from .hello_service import HelloService
@@ -149,7 +149,8 @@ context = Autoboot(AutoBootConfig(config_dir="./config"))
 context.run()
 
 # 在容器启动完成后调用
-assert id(AppService()) == id(AppService()) # 返回的对象地址相同
+# AppService() 会在创建对象后自动注册到容器，且多次调用返回同一个实例
+assert id(AppService()) == id(AppService())
 Autoboot.logger.info("AppService.hello: {}", AppService().hello())
 ```
 
