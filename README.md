@@ -149,9 +149,9 @@ context = Autoboot(AutoBootConfig(config_dir="./config"))
 context.run()
 
 # 在容器启动完成后调用
-# AppService() 会在创建对象后自动注册到容器，且多次调用返回同一个实例
-assert id(AppService()) == id(AppService())
-Autoboot.logger.info("AppService.hello: {}", AppService().hello())
+# HelloService() 会在创建对象后自动注册到容器，且多次调用返回同一个实例
+assert id(HelloService()) == id(HelloService())
+Autoboot.logger.info("HelloService.hello: {}", HelloService().hello())
 ```
 
 
