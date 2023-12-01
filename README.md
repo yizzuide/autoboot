@@ -127,6 +127,33 @@ context.run()
 Autoboot.logger.info("api.secret: {}", ApiProperties.secret())
 ```
 
+### 注册组件
+#### 创建组件: hello_service.py
+```python
+from autoboot.meta import Component
+
+class HelloService(Component):
+  def __init__(self):
+    pass
+
+  def hello(self):
+    return "Hello World!"
+```
+
+#### 注册组件
+```python
+from autoboot import AutoBoot, AutoBootConfig
+from .hello_service import HelloService
+
+context = Autoboot(AutoBootConfig(config_dir="./config"))
+context.run()
+
+# 在容器启动完成后调用
+assert id(AppService()) == id(AppService()) # 返回的对象地址相同
+Autoboot.logger.info("AppService.hello: {}", AppService().hello())
+```
+
+
 ### 监听容器事件
 
 #### 主配置文件
