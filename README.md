@@ -267,7 +267,7 @@ context.run()
 有问题可以在issues开话题讨论，如果你有新的想法，创建新的`feat`或`pref`分支并提交PR。
 
 ## License
-[MIT License](https://github.com/yizzuide/autoboot/blob/main/LICENSE)
+[MIT License](https://github.com/yizzuide/autoboot/blob/main/LICENSE.txt)
 
 ## Citation
 ```bibtex
