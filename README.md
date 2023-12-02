@@ -6,13 +6,13 @@
   </a>
   <a href="https://pypi.org/project/autoboot">
         <img src="https://img.shields.io/pypi/pyversions/autoboot.svg?color=%2334D058" alt="Python">
-    </a>
-    <a href="https://pepy.tech/project/autoboot">
-        <img src="https://static.pepy.tech/personalized-badge/autoboot?period=total&units=international_system&left_color=grey&right_color=brightgreen&left_text=Downloads" alt="Downloads">
-    </a>
-    <a href="https://github.com/yizzuide/autoboot/blob/main/LICENSE">
-        <img src="https://img.shields.io/github/license/yizzuide/autoboot" alt="License">
-    </a>
+  </a>
+  <a href="https://pepy.tech/project/autoboot">
+      <img src="https://static.pepy.tech/personalized-badge/autoboot?period=total&units=international_system&left_color=grey&right_color=brightgreen&left_text=Downloads" alt="Downloads">
+  </a>
+  <a href="https://github.com/yizzuide/autoboot/blob/main/LICENSE">
+      <img src="https://img.shields.io/github/license/yizzuide/autoboot" alt="License">
+  </a>
 </p>
 
 ## Purpose
