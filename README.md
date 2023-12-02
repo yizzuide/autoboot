@@ -50,7 +50,7 @@ pip install autoboot
 * 启动配置文件`./config/.env`
 
 ```ini
-# 配置环境
+# 环境名称（默认值：dev，框架根据这个配置项来加载当前的环境配置）
 ENV_NAME=dev
 
 # 应用名
