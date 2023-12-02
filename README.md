@@ -34,7 +34,7 @@
 
 - 不需要扫描组件所在的包，所有组件只需要声明即可（除Listener特殊组件需要配置扫描外）。
 - 所有声明的组件只有在调用时才会创建并缓存，实现了SpringBoot推荐的懒加载创建方式。
-- 配置采用`.env + yaml`组合，`.env`用于支持多环境配置项，主配置仅为`autoboot.yaml`，框架扩展了自定义指令`!env`用于从`.env`取值。
+- 配置采用`.env + yaml`组合，`.env`用于支持多环境配置项，主配置通过`autoboot.yaml`，框架扩展了yaml自定义指令`!env`用于从`.env`取值。
 - 微服务项目的启动速度快到可以在1-2秒内启动完成，相比SpringBoot的10几秒，快了至少10倍。
 
 ## Quick Start
@@ -47,7 +47,7 @@ pip install autoboot
 ### Usage
 
 #### 配置
-* 启动配置文件：./config/.env
+* 启动配置文件`./config/.env`
 
 ```ini
 # 配置环境
@@ -57,13 +57,13 @@ ENV_NAME=dev
 APPLICATION_NAME=demo
 ```
 
-* 环境配置文件：./config/.env.dev
+* 环境配置文件`./config/.env.dev`
 
 ```ini
 APPLICATION_NAME=demo-dev
 ```
 
-* 主配置文件：./config/autoboot.yaml
+* 主配置文件`./config/autoboot.yaml`
 
 ```yml
 autoboot:
@@ -80,7 +80,7 @@ autoboot:
       retention: !!str 30 days
 ```
 
-#### 创建并启动容器上下文
+#### 创建并启动容器
 ```python
 from autoboot import AutoBoot, AutoBootConfig
 
@@ -95,14 +95,14 @@ Autoboot.logger.info("Context run succeed!")
 
 ### 自定义配置
 
-#### 在主配置里添加
+#### 主配置文件
 ```yml
 api:
   # 在环境配置文件.env添加：API_SECRET_KEY=xxx
   secret: !env API_SECRET_KEY
 ```
 
-#### 创建配置类: api_properties.py
+#### 创建配置类`api_properties.py`
 ```python
 from autoboot.annotation.env import value_component
 
@@ -115,7 +115,7 @@ class ApiProperties:
     return ""
 ```
 
-#### 导入并使用配置
+#### 创建并启动容器
 ```python
 from autoboot import AutoBoot, AutoBootConfig
 from .api_properties import ApiProperties
@@ -128,7 +128,7 @@ Autoboot.logger.info("api.secret: {}", ApiProperties.secret())
 ```
 
 ### 注册组件
-#### 创建组件: hello_service.py
+#### 创建组件`hello_service.py`
 ```python
 from autoboot.meta import Component
 
@@ -168,7 +168,7 @@ autoboot:
 
 #### 项目下创建目录`listener`
 
-在该目录创建`__init__.py`，添加以下内容：
+* 在该目录创建`__init__.py`
 
 ```python
 from .app_listener import AppListener
@@ -176,7 +176,7 @@ from .app_listener import AppListener
 __all__ = ["AppListener"]
 ```
 
-在该目录创建`app_listener.py`，添加以下内容：
+* 在该目录创建`app_listener.py`
 
 ```python
 from autoboot import AutoBoot
@@ -234,7 +234,7 @@ emitter.emit(event=Event(PayOrder("1001")))
 ```
 
 ### 扩展插件
-#### 创建插件: my_plugin.py
+#### 创建插件`my_plugin.py`
 ```python
 from autoboot.plugin import AppPlugin
 
@@ -258,6 +258,10 @@ context = Autoboot(AutoBootConfig(config_dir="./config"))
 context.apply(MyPlugin())
 context.run()
 ```
+
+## Ecosystem
+* [autoboot-web](https://github.com/yizzuide/autoboot-web)
+* [autoboot-data](https://github.com/yizzuide/autoboot-data)
 
 ## Contributors
 有问题可以在issues开话题讨论，如果你有新的想法，创建新的`feat`或`pref`分支并提交PR。
