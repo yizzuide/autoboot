@@ -32,9 +32,11 @@
 | Python 3.11 | autoboot 0.7 | uvicorn
 | Java 1.8 | SpringBoot 2.7 | Tomcat
 
+- 基于单容器设计，使用简单，学习成本低。
 - 不需要扫描组件所在的包，所有组件只需要声明即可（除Listener特殊组件需要配置扫描外）。
 - 所有声明的组件只有在调用时才会创建并缓存，实现了SpringBoot推荐的懒加载创建方式。
-- 配置采用`.env + yaml`组合，`.env`用于支持多环境配置项，主配置通过`autoboot.yaml`，框架扩展了yaml自定义指令`!env`用于从`.env`取值。
+- 配置采用`.env + yaml`组合，`.env`用于支持多环境配置项，主配置使用`autoboot.yaml`，框架扩展了yaml自定义指令`!env`用于从`.env`中获取配置参数。
+- 没有历史遗留包袱，启动创建的对象少，占用内存低。
 - 微服务项目的启动速度快到可以在1-2秒内启动完成，相比SpringBoot的10几秒，快了至少10倍。
 
 ## Quick Start
@@ -129,6 +131,9 @@ Autoboot.logger.info("api.secret: {}", ApiProperties.secret())
 
 ### 注册组件
 #### 创建组件`hello_service.py`
+
+通过继承Component实现自注册，如果自己项目中的类，推荐采用这种方式。
+
 ```python
 from autoboot.meta import Component
 
@@ -140,7 +145,21 @@ class HelloService(Component):
     return "Hello World!"
 ```
 
-#### 注册并获取组件
+#### 非继承式注册组件
+
+如果注册的类来自第三方库，无法采用继承Component的方式，那么可以通过下面方式来注册：
+
+```python
+from autoboot.annotation import component
+from .hello_service import HelloService
+
+
+@component("HelloService")
+def hello_service():
+  return HelloService()
+```
+
+#### 调用组件
 ```python
 from autoboot import AutoBoot, AutoBootConfig
 from .hello_service import HelloService
