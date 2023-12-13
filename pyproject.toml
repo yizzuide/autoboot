@@ -1,3 +1,9 @@
+# Python package
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+
 # https://beta.ruff.rs/docs/configuration/
 [tool.ruff]
 # Enable the pycodestyle (`E`) and Pyflakes (`F`) rules by default.
