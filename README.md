@@ -287,12 +287,3 @@ context.run()
 
 ## License
 [MIT License](https://github.com/yizzuide/autoboot/blob/main/LICENSE.txt)
-
-## Citation
-```bibtex
-@article{yizzuide2023autoboot,
-  author    = {yizzuide},
-  title     = {autoboot: IoC with auto config framework},
-  year      = {2023},
-}
-```
