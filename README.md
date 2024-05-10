@@ -106,12 +106,11 @@ api:
 
 #### 创建配置类`api_properties.py`
 ```python
-from autoboot.annotation.env import value_component
+from autoboot.annotation.env import static_property
 
 class ApiProperties:
 
-  @value_component("api.secret")
-  @staticmethod
+  @static_property("api.secret")
   def secret() -> str:
     # 返回的值作为默认的配置值
     return ""
@@ -221,7 +220,7 @@ from dataclasses import dataclass
 from autoboot.event import emitter, Event
 from loguru import logger
 
-@dataclass
+@dataclass(slots=True)
 class PayOrder:
   no: str
 
@@ -240,7 +239,7 @@ from dataclasses import dataclass
 from autoboot.event import emitter, Event
 from loguru import logger
 
-@dataclass
+@dataclass(slots=True)
 class PayOrder:
   no: str
 

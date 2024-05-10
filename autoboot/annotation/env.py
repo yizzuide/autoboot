@@ -1,6 +1,7 @@
 
 import os
 import wrapt
+from functools import wraps
 from typing import Callable, TypeVar
 from autoboot.applications import AutoBoot
 from autoboot.annotation.component import component
@@ -37,7 +38,28 @@ def value_component(keypath: str) -> R:
   """get value from config file and cache as component."""
   
   @wrapt.decorator
-  @component(name=f"env[{keypath}]")
+  @component(f"env[{keypath}]")
   def decorator(fn: Callable[..., R], instance, args, kwargs) -> R:
     return env(keypath) or fn(*args, **kwargs)
   return decorator
+
+def static_property(keypath: str) -> R:
+  """Decorate as a static method, get value from config file and cache as component.
+
+  Args:
+      keypath (str): config key name
+
+  Returns:
+      R: config value
+  """ 
+  
+  # @staticmethod not work with @wrapt.decorator
+  def wrapper(fn: Callable[..., R]) -> R:
+    @staticmethod
+    @component(f"env[{keypath}]")
+    @value(keypath)
+    @wraps(fn)
+    def decorator(*args, **kwargs):
+        return fn(*args, **kwargs)
+    return decorator
+  return wrapper

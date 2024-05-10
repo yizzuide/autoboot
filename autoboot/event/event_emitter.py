@@ -4,7 +4,7 @@ from autoboot.util.type_reflect import get_generic_type
 
 T = TypeVar('T')
 
-@dataclass
+@dataclass(slots=True)
 class Event(Generic[T]):
   data: T
   source: any = None

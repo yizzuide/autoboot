@@ -2,11 +2,11 @@ from dataclasses import dataclass
 from autoboot.event import emitter, Event
 from loguru import logger
 
-@dataclass
+@dataclass(slots=True)
 class PayOrder:
   no: str
   
-@dataclass
+@dataclass(slots=True)
 class RepayOrder:
   no: str
   

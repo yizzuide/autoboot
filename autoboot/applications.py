@@ -14,7 +14,7 @@ AppType = TypeVar("AppType", bound="AutoBoot")
 
 R = TypeVar("R")
 
-@dataclass
+@dataclass(slots=True)
 class AutoBootConfig:
   """AutoBoot global config"""
   

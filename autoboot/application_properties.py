@@ -1,35 +1,29 @@
 
-from autoboot.annotation.env import value_component
+from autoboot.annotation.env import static_property
 
 
 class ApplicationProperties:
   
-  @value_component("autoboot.application.name")
-  @staticmethod
+  @static_property("autoboot.application.name")
   def app_name() -> str:
     return "app"
 
-  @value_component("autoboot.application.module")
-  @staticmethod
+  @static_property("autoboot.application.module")
   def module() -> str:
     return "api"
   
-  @value_component("autoboot.application.scan_listener_packages")
-  @staticmethod
+  @static_property("autoboot.application.scan_listener_packages")
   def scan_listener_packages() -> list[str]:
     pass
   
-  @value_component("autoboot.application.log.dir")
-  @staticmethod
+  @static_property("autoboot.application.log.dir")
   def log_dir() -> str:
     return "logs"
   
-  @value_component("autoboot.application.log.max_size")
-  @staticmethod
+  @static_property("autoboot.application.log.max_size")
   def log_max_size() -> str:
     return "100 MB"
 
-  @value_component("autoboot.application.log.retention")
-  @staticmethod
+  @static_property("autoboot.application.log.retention")
   def log_retention() -> str:
     return "30 days"
