@@ -14,4 +14,4 @@ autoboot:
 server:
   threads:
     max: 20
-    rejected: WAIT
+    rejected: wait

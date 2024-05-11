@@ -15,4 +15,4 @@ class ServerProperties:
   
   @static_property("server.threads.rejected")
   def thread_rejected() -> str:
-    return "WAIT"
+    return "wait"

@@ -25,9 +25,9 @@ class ThreadPoolTask(Component):
   def submit(self, fn: Callable[..., Any]):
     rejected = ServerProperties.thread_rejected()    
     if self.is_overflow():
-      if rejected == "ABORT":
+      if rejected == "abort":
         raise RuntimeError("ThreadPoolTask: Too many task executing")
-      elif rejected == "DISCARD":
+      elif rejected == "discard":
         return
     return self.executor.submit(fn)
   
