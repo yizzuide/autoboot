@@ -14,9 +14,13 @@ class Logging:
   Logging class wrapper with loguru.
   """
   
+  # Object memory and allocation optimization
+  __slot__ = ["level", "log_dir", "app_name", "module", "max_size", "retention", "logger"]
+  
   _instance: LoggingType = None
   
-  def __init__(self, log_dir: str, app_name: str, module: str, max_size: str, retention: str, env_name: str):
+  def __init__(self, level: str, log_dir: str, app_name: str, module: str, max_size: str, retention: str, env_name: str):
+    self.level = level
     self.log_dir = log_dir
     self.app_name = app_name
     self.module = module
@@ -30,7 +34,7 @@ class Logging:
       handlers=[{
         "sink": sys.stdout,
         "format": "<green>{time:YYYY-MM-DD HH:mm:ss.SSS}</green> | <level>{level: <8}</level> | <cyan>{name}</cyan>:<cyan>{function}</cyan>:<cyan>{line}</cyan> - <level>{message}</level>",
-        "level": "DEBUG",
+        "level": self.level,
         "colorize": True,
         "backtrace": True,
       }])
@@ -45,7 +49,7 @@ class Logging:
         "sink": f"{log_app_dir}/{self.module}-{{time:YYYY-MM-DD}}.log",
         "rotation": self.max_size,
         "retention": self.retention,
-        "level": "INFO",
+        "level": self.level,
         "format": "{time:YYYY-MM-DD HH:mm:ss.SSS} | {level: <8} | {name}:{module}:{function}:{line} - {message}",
         "colorize": False,
         "enqueue": True,

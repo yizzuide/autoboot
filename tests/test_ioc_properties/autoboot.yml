@@ -1,13 +1,17 @@
+# yaml-language-server: $schema=../../autoboot/autoboot.schema.json
 autoboot:
   application:
+   # yml 插件：redhat.vscode-yaml
+   # yml 配置支持!env：yaml.customTags
     name: &app_name !env APPLICATION_NAME
     module: &module api
     scan_listener_packages:
       - tests.test_ioc_properties.listener
     log:
+      level: !env $LOG_LEVEL
       max_size: !!str 200 MB
 
 server:
   threads:
     max: 20
-    rejected: wait
+    rejected: WAIT

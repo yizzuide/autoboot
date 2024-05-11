@@ -111,6 +111,7 @@ class AutoBoot(object):
     AutoBoot.logger = Logging(
       app_name=ApplicationProperties.app_name(),
       module=ApplicationProperties.module(),
+      level=ApplicationProperties.log_level(),
       log_dir=ApplicationProperties.log_dir(),
       max_size=ApplicationProperties.log_max_size(),
       retention=ApplicationProperties.log_retention(),

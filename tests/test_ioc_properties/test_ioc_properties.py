@@ -7,3 +7,4 @@ def testProperties():
   autoboot.run()
     
   assert(ApplicationProperties.app_name() == "app-dev")
+  assert(ApplicationProperties.log_level() == "DEBUG")

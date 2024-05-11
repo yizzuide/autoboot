@@ -15,5 +15,4 @@ class ServerProperties:
   
   @static_property("server.threads.rejected")
   def thread_rejected() -> str:
-    """Available reject strategy: abort, discard, wait"""
-    return "wait"
+    return "WAIT"

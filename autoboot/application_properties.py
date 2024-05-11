@@ -16,6 +16,10 @@ class ApplicationProperties:
   def scan_listener_packages() -> list[str]:
     pass
   
+  @static_property("autoboot.application.log.level")
+  def log_level() -> str:
+    return "INFO"
+  
   @static_property("autoboot.application.log.dir")
   def log_dir() -> str:
     return "logs"
