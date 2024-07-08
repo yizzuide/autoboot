@@ -14,6 +14,7 @@ AppType = TypeVar("AppType", bound="AutoBoot")
 
 R = TypeVar("R")
 
+# In Python 3.10+ you can use `slots=True` with a dataclass to make it more memory-efficient.
 @dataclass(slots=True)
 class AutoBootConfig:
   """AutoBoot global config"""
@@ -33,7 +34,7 @@ class AutoBoot(object):
   _instance = None
   _init_flag = False
   
-  def __new__(cls, config: Optional[AutoBootConfig]) -> Self:
+  def __new__(cls, config: Optional[AutoBootConfig] = AutoBootConfig()) -> Self:
     # create instance only once
     if cls._instance is None:
         cls._instance = super().__new__(cls)
@@ -66,7 +67,7 @@ class AutoBoot(object):
   def get_runner(name: str):
     """Get plugin runner with name."""
     return AutoBoot.instance()._runners.get(name)
-     
+  
   @property
   def app_plugins(self) -> list[AppPlugin]:
     """Get application plugins."""
