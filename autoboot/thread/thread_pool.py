@@ -1,14 +1,11 @@
 
 from concurrent.futures import ThreadPoolExecutor
-from autoboot.meta import Component
+from autoboot.annotation import component
 from autoboot import ServerProperties
 from typing import Callable, Any
 
-
-class ThreadPoolTask(Component):
-  """The ThreadPoolTask class is extends Component which means is a singleton instance."""
-  
-  component_name = "thread_pool_task"
+@component()
+class ThreadPoolTask(object):
   
   def __init__(self):
     self.executor = ThreadPoolExecutor(max_workers=ServerProperties.thread_max_workers())
