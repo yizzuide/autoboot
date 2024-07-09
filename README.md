@@ -29,7 +29,7 @@
 
 | 开发语言 | 框架 | server |
 | :----: | :----: | :----: |
-| Python 3.11 | autoboot 0.7 | uvicorn
+| Python 3.11 | autoboot 0.10 | uvicorn
 | Java 1.8 | SpringBoot 2.7 | Tomcat
 
 - 基于单容器设计，使用简单，学习成本低。
@@ -71,7 +71,7 @@ APPLICATION_NAME=demo-dev
 autoboot:
   application:
     # !env 引用 .env 里的配置参数 
-    name: !env APPLICATION_NAME
+    name: !env $APPLICATION_NAME
     # 微服务模块名
     module: api
     # 日志
@@ -101,7 +101,7 @@ Autoboot.logger.info("Context run succeed!")
 ```yml
 api:
   # 在环境配置文件.env添加：API_SECRET_KEY=xxx
-  secret: !env API_SECRET_KEY
+  secret: !env $API_SECRET_KEY
 ```
 
 #### 创建配置类`api_properties.py`
@@ -154,7 +154,7 @@ from autoboot.annotation import component
 from .hello_service import HelloService
 
 
-@component("HelloService")
+@component(name='HelloService')
 def hello_service():
   return HelloService()
 ```
