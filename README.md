@@ -129,14 +129,15 @@ Autoboot.logger.info("api.secret: {}", ApiProperties.secret())
 ```
 
 ### 注册组件
-#### 创建组件`hello_service.py`
+#### 类式注册组件
 
-通过继承Component实现自注册，如果自己项目中的类，推荐采用这种方式。
+创建组件`hello_service.py`文件：
 
 ```python
-from autoboot.meta import Component
+from autoboot.annotation import component
 
-class HelloService(Component):
+@component()
+class HelloService(object):
   def __init__(self):
     pass
 
@@ -144,7 +145,7 @@ class HelloService(Component):
     return "Hello World!"
 ```
 
-#### 非继承式注册组件
+#### 函数式注册组件
 
 如果注册的类来自第三方库，无法采用继承Component的方式，那么可以通过下面方式来注册：
 
