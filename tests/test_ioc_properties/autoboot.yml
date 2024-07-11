@@ -1,8 +1,8 @@
 # yaml-language-server: $schema=../../autoboot/autoboot.schema.json
 autoboot:
   application:
-    # yml 插件：redhat.vscode-yaml
-    # yml 配置支持!env：yaml.customTags
+    # yml plugin：redhat.vscode-yaml
+    # yml add config !env：yaml.customTags
     name: &app_name !env $APPLICATION_NAME
     module: &module api
     scan_listener_packages:
@@ -15,3 +15,7 @@ server:
   threads:
     max: 20
     rejected: wait
+
+service:
+  hello:
+    enable: true

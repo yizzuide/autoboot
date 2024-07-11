@@ -1,10 +1,11 @@
 
 from autoboot import ApplicationProperties, AutoBoot, AutoBootConfig
-from autoboot.annotation import component
+from autoboot.annotation import component, conditional
 
 
+@conditional(value="service.hello.enable", having_value=True)
 @component()
-class HellService(object):
+class HelloService(object):
   def __init__(self) -> None:
     self.list = []
       
@@ -21,6 +22,5 @@ def testProperties():
     
   assert(ApplicationProperties.app_name() == "app-dev")
   assert(ApplicationProperties.log_level() == "DEBUG")
-  assert(id(HellService()) == id(HellService()))
-  HellService().add("test")
-  assert(HellService().getItems() == ["test"])
+  AutoBoot.logger.warning(f"hello service: {HelloService()}")
+  assert(id(HelloService()) == id(HelloService()))

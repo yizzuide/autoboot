@@ -1,5 +1,5 @@
 
-from autoboot.annotation.env import static_property
+from autoboot.annotation import static_property
 
 
 class ApplicationProperties:

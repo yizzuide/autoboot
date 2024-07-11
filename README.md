@@ -106,7 +106,7 @@ api:
 
 #### 创建配置类`api_properties.py`
 ```python
-from autoboot.annotation.env import static_property
+from autoboot.annotation import static_property
 
 class ApiProperties:
 
