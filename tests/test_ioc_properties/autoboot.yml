@@ -2,7 +2,7 @@
 autoboot:
   application:
     # yml plugin：redhat.vscode-yaml
-    # yml add config !env：yaml.customTags
+    # yml config sugar !env：yaml.customTags
     name: &app_name !env $APPLICATION_NAME
     module: &module api
     scan_listener_packages:

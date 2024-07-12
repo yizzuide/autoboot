@@ -27,7 +27,7 @@ def construct_include(loader: Loader, node: yaml.Node) -> Any:
   filename = os.path.abspath(os.path.join(loader._root, loader.construct_scalar(node)))
   extension = os.path.splitext(filename)[1].lstrip(".")
 
-  with open(filename, "r") as f:
+  with open(filename, "r", encoding='utf8') as f:
     if extension in ("yaml", "yml"):
       return yaml.load(f, Loader)
     elif extension in ("json",):

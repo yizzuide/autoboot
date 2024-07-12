@@ -13,7 +13,7 @@ def load_yaml_file(dir: str, file_name: str) -> dict[str, Any]:
     file_path = f"{file_name}.yml"
   else:
     file_path = f"{file_name}.yaml"
-  with open(os.path.join(dir, file_path), 'r') as f:
+  with open(os.path.join(dir, file_path), 'r', encoding='utf8') as f:
     return yaml.load(f, Loader)
   
 def get_yml_value(config_data: dict[str, Any], keypath: str) -> Any:
