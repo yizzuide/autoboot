@@ -22,5 +22,4 @@ def testProperties():
     
   assert(ApplicationProperties.app_name() == "app-dev")
   assert(ApplicationProperties.log_level() == "DEBUG")
-  AutoBoot.logger.warning(f"hello service: {HelloService()}")
   assert(id(HelloService()) == id(HelloService()))

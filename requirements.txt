@@ -5,4 +5,11 @@ pyyaml>=6.0.1, <7.0
 wrapt>=1.14.1, <2.0
 pydantic>=1.10.12, <2.0
 result>=0.14.0, <1.0
-durations>=0.3.3, <1.0
+arrow>=1.2.3, <2.0
+  #python-dateutil>=2.7.0
+cytoolz>=0.12.3, <1.0
+  #toolz-0.12.1
+glom>=23.5.0, <24.0
+  #boltons==24.0.0
+jmespath>=1.0.1, <2.0
+more-itertools>=10.1.0, <11.0

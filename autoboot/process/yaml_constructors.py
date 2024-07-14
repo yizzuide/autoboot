@@ -1,9 +1,11 @@
 
 import os
 import json
-import yaml
 from typing import Any, IO
-from durations import Duration
+
+import yaml
+import arrow
+
 from autoboot.util.capacity import Capacity
 
 
@@ -46,7 +48,7 @@ def environment_vars_constructor(loader: Loader, node: yaml.Node) -> Any:
 
 def duration_constructor(loader: Loader, node: yaml.Node) -> Any:
   value = loader.construct_scalar(node)
-  return int(Duration(value).to_miliseconds())
+  return int(arrow.utcnow().dehumanize(f"in {value}").timestamp())
 
 def capacity_constructor(loader: Loader, node: yaml.Node) -> Any:
   value = loader.construct_scalar(node)
