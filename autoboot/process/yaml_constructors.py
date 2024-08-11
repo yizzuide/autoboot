@@ -4,8 +4,7 @@ import json
 from typing import Any, IO
 
 import yaml
-import arrow
-
+from autoboot.util import time_duration
 from autoboot.util.capacity import Capacity
 
 
@@ -48,7 +47,7 @@ def environment_vars_constructor(loader: Loader, node: yaml.Node) -> Any:
 
 def duration_constructor(loader: Loader, node: yaml.Node) -> Any:
   value = loader.construct_scalar(node)
-  return int(arrow.utcnow().dehumanize(f"in {value}").timestamp())
+  return time_duration.parse(value).timestamp()
 
 def capacity_constructor(loader: Loader, node: yaml.Node) -> Any:
   value = loader.construct_scalar(node)
