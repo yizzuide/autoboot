@@ -1,6 +1,8 @@
 
 import abc
 from typing import TypeVar, Generic
+
+from autoboot import AutoBoot
 from .app_plugin_metaclass import AppPluginMetaclass
 
 T = TypeVar('T')
@@ -11,8 +13,6 @@ class AppPlugin(Generic[T], metaclass=AppPluginMetaclass):
   @classmethod
   def get_context(cls) -> T:
     """Don't override this class method which used by the internal mechanism of the framework."""
-    from autoboot import AutoBoot
-  
     return AutoBoot.get_runner(cls.__ctx__)
   
   @classmethod

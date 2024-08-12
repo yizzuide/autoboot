@@ -1,10 +1,10 @@
 
 import re
 from tzlocal import get_localzone
-from whenever import Instant, days, hours, minutes, seconds
+from whenever import Instant, ZonedDateTime, days, hours, minutes, seconds
 
-def parse(duration_expr: str):
-  """Parse a duration expression and return an ZoneDateTime object representing the end time."""
+def parse(duration_expr: str) -> ZonedDateTime:
+  """Parse a duration expression and return an ZonedDateTime object representing the end time."""
   
   pattern = r'(\d+)([smhd])'
   matches = re.findall(pattern, duration_expr.lower())

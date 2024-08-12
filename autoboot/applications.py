@@ -1,13 +1,16 @@
 
 import loguru
 from dataclasses import dataclass
-from typing import Any, Callable, Optional, Tuple, TypeVar, Self
+from typing import Any, Callable, Optional, Tuple, TypeVar, Self, TYPE_CHECKING
 from autoboot.args import get_env_name
 from autoboot.logging import Logging
-from autoboot.plugin import AppPlugin
 from autoboot.process import load_env_file, load_yaml_file
 from autoboot.event import ApplicationListener
 from autoboot.event import ComponentListener
+
+# resolve circular reference
+if TYPE_CHECKING:
+  from autoboot.plugin import AppPlugin
 
 # define AutoBoot class type
 AppType = TypeVar("AppType", bound="AutoBoot")
@@ -44,7 +47,7 @@ class AutoBoot(object):
     if AutoBoot._init_flag is True:
       return
     self.config = config
-    self._app_plugins: list[AppPlugin] = []
+    self._app_plugins: list['AppPlugin'] = [] # circular reference using 'Type'
     self._components: list[Tuple[str, Any]] = []
     self._component_listeners: list[ComponentListener] = []
     self._runners: dict[str, Any] = {}
@@ -69,12 +72,12 @@ class AutoBoot(object):
     return AutoBoot.instance()._runners.get(name)
   
   @property
-  def app_plugins(self) -> list[AppPlugin]:
+  def app_plugins(self) -> list['AppPlugin']:
     """Get application plugins."""
     return self._app_plugins
   
   @app_plugins.setter
-  def app_plugins(self, app_plugins: list[AppPlugin]) -> None:
+  def app_plugins(self, app_plugins: list['AppPlugin']) -> None:
     self._app_plugins = app_plugins
   
   @property
@@ -82,7 +85,7 @@ class AutoBoot(object):
     """Ioc container for find depends."""
     return self._components
     
-  def apply(self, app_plugin: AppPlugin) -> Self:
+  def apply(self, app_plugin: 'AppPlugin') -> Self:
     """Apply plugin in application context."""
     self._app_plugins.append(app_plugin)
     return self

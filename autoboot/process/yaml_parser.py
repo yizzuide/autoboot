@@ -4,7 +4,7 @@ from typing import Any
 
 import yaml
 from .yaml_constructors import Loader
-from autoboot.util.object_navigator import get_value_by
+from autoboot.util.object_navigator import get_fuzz_value_by
 
 
 def load_yaml_file(dir: str, file_name: str) -> dict[str, Any]:
@@ -17,7 +17,7 @@ def load_yaml_file(dir: str, file_name: str) -> dict[str, Any]:
     return yaml.load(f, Loader)
   
 def get_yml_value(config_data: dict[str, Any], keypath: str) -> Any:
-  value = get_value_by(config_data, keypath)
+  value = get_fuzz_value_by(config_data, keypath)
   if not value:
     return None
   if isinstance(value, str) and value.startswith("env(") and value.endswith(")"):
